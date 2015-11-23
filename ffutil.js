@@ -22,7 +22,7 @@ ffutil.videoInfo = function (inputStream, callback) {
 			var videoInfo = JSON.parse(stdout);
 			typeof(callback) === 'function' ? callback(null, videoInfo) : null;
 		} catch (e) {
-			typeof(callback) === 'function' ? callback(err) : null;
+			typeof(callback) === 'function' ? callback(e) : null;
 		}
 	});
 };
@@ -118,22 +118,22 @@ ffutil.makeThumb = function (inputStream, dstdir, thumbname, videoInfo, callback
 		interval = parseInt(duration / 2);
 	}
 
-	Thenjs.eachSeries(indexs, function (cont, i) { // ´óÍ¼
+	Thenjs.eachSeries(indexs, function (cont, i) { // å¤§å›¾
 		var cmd = util.format('ffmpeg -analyzeduration 100000000 -probesize 9999999 -ss %d -i %s -r 1 -vframes 1 -y -f image2 %s/%s_%d.jpg -loglevel quiet', interval * i, inputStream, dstdir, thumbname, i);
 		debuglog(cmd);
 		exec(cmd, cont);
 	}, true)
-	.eachSeries(indexs, function (cont, i) { // ·½ĞÎËõÂÔÍ¼
+	.eachSeries(indexs, function (cont, i) { // æ–¹å½¢ç¼©ç•¥å›¾
 		var cmd = util.format("ffmpeg -loglevel quiet -i %s/%s_%d.jpg -vf crop=%d:%d -s 200x200 -y %s/%s_w_%d.jpg", dstdir, thumbname, i, height, height, dstdir, thumbname, i);
 		debuglog(cmd);
 		exec(cmd, cont);
 	})
-	.eachSeries(indexs, function (cont, i) { // ÖĞĞÍËõÂÔÍ¼
+	.eachSeries(indexs, function (cont, i) { // ä¸­å‹ç¼©ç•¥å›¾
 		var cmd = util.format("ffmpeg -loglevel quiet -i %s/%s_%d.jpg -s %s -y %s/%s_m_%d.jpg", dstdir, thumbname, i, middleSize, dstdir, thumbname, i);
 		debuglog(cmd);
 		exec(cmd, cont);
 	})
-	.eachSeries(indexs, function (cont, i) { // Ğ¡ĞÍËµÂÔÍ¼
+	.eachSeries(indexs, function (cont, i) { // å°å‹è¯´ç•¥å›¾
 		var cmd = util.format("ffmpeg -loglevel quiet -i %s/%s_%d.jpg -s %s -y %s/%s_s_%d.jpg", dstdir, thumbname, i, minSize, dstdir, thumbname, i);
 		debuglog(cmd);
 		exec(cmd, cont);
