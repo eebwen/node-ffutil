@@ -1,0 +1,15 @@
+{
+  "name": "node-ffutil",
+  "version": "1.0.0",
+  "description": "ffmepg for nodejs",
+  "main": "ffutils.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "ffmpeg"
+  ],
+  "author": "eebwen",
+  "license": "MIT"
+}
